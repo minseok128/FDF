@@ -21,14 +21,6 @@
 # include <math.h>
 # include "./libft/libft.h"
 
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_data;
-
 typedef struct	s_3d_p {
 	double	x;
 	double	y;
@@ -42,6 +34,17 @@ typedef struct s_map {
 	t_3d_p	offset_2d;
 	double	scale;
 } t_map;
+
+typedef struct	s_data {
+	void	*mlx;
+	void	*mlx_win;
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_length;
+	int		endian;
+	t_map	map;
+}	t_data;
 
 void	parse_map(int argc, char **argv, t_map *map);
 

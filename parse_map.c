@@ -62,20 +62,21 @@ void	parse_map(int argc, char **argv, t_map *map)
 	{
 		(map->m3d)[i] = malloc(sizeof(t_3d_p) * map->width);
 		line = ft_split(get_next_line(fd), ' ');
-		j = 0;
-		while (j < map->width)
+		j = -1;
+		while (++j < map->width)
 		{
-			(map->m3d)[i][j].x = i * 5;
-			(map->m3d)[i][j].y = j * 5;
+			//printf("oh : %d %d\n", (i - (map->width / 2)), (j - (map->height / 2)));
+			(map->m3d)[i][j].y = (i - (map->height / 2)) * 2.5;
+			(map->m3d)[i][j].x = (j - (map->width / 2)) * 2.5;
 			(map->m3d)[i][j].z = ft_atoi(line[j]);
-			j++;
 		}
 		free(line);
 	}
+	printf("w:%d | h:%d\n", map->width, map->height);
 	// for (int _i = 0; _i < map->height; _i++)
 	// {
 	// 	for (int _j = 0; _j < map->width; _j++)
-	// 		printf("%f |", (map->m3d)[_i][_j].z);
+	// 		printf("%f,%f,%f\n", (map->m3d)[_i][_j].x, (map->m3d)[_i][_j].y, (map->m3d)[_i][_j].z);
 	// 	printf("\n");
 	// }
 }
