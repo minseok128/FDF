@@ -44,7 +44,7 @@ static char	*get_line(char **backup)
 	int		i;
 
 	if (!(*backup)[0])
-		return (freeing(backup));
+		return ((char *)(freeing(backup) - 1));
 	i = 0;
 	while ((*backup)[i] && (*backup)[i] != '\n')
 		i++;
@@ -104,6 +104,8 @@ char	*get_next_line(int fd)
 	line = get_line(&backup);
 	if (!line)
 		return (0);
+	if ((int)line == -1)
+		return (line);
 	backup = make_new_backup(&backup, &line);
 	return (line);
 }

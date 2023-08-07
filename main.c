@@ -49,35 +49,11 @@ void	dda_line(t_data *data, t_3d_p p1, t_3d_p p2)
 	y_inc = (p2.y - p1.y) / steps;
 	while (steps-- >= 0)
 	{
-		my_mlx_pixel_put(data, x, y, 0x00FF0000);
+		my_mlx_pixel_put(data, x, y, 0x00FFFFFF);
 		x += x_inc;
 		y += y_inc;
 	}
 }
-
-// void	put_suqure(t_data *data, double x, double y, double w)
-// {
-// 	t_3d_p	p1;
-// 	t_3d_p	p2;
-
-// 	if (w)
-// 	{
-// 		p1.x = x;
-// 		p1.y = y;
-// 		p2.x = x + w;
-// 		p2.y = y;
-// 		dda_line(data, map, p1, p2);
-// 		p2.x = x;
-// 		p2.y = y + w;
-// 		dda_line(data, map, p1, p2);
-// 		p2.x = x + w;
-// 		p1.x = x + w;
-// 		dda_line(data, map, p1, p2);
-// 		p1.x = x;
-// 		p1.y = y + w;
-// 		dda_line(data, map, p1, p2);
-// 	}
-// }
 
 void	rotate_xaxis(t_3d_p *p, double theta)
 {
@@ -112,25 +88,22 @@ void	rotate_zaxis(t_3d_p *p, double theta)
 	p->y = p2.x * sin(theta) + p2.y * cos(theta);
 }
 
-void	rotate_3d_mode(t_map *map, int mode, double rot)
+void	interpolate_3d(t_map *map)
 {
 	int	i;
 	int	j;
-	double	theta;
 
-	theta = (M_PI / 180) * rot;
 	i = 0;
 	while (i < (map->height))
 	{
 		j = 0;
 		while (j < (map->width))
 		{
-			if (mode == 0)
-				rotate_xaxis(&(map->m3d[i][j]), theta);
-			else if (mode == 1)
-				rotate_yaxis(&(map->m3d[i][j]), theta); 
-			else
-				rotate_zaxis(&(map->m3d[i][j]), theta);
+			map->m3d[i][j] = map->default_m3d[i][j];
+			map->m3d[i][j].z *= map->z_scale;
+			rotate_xaxis(&(map->m3d[i][j]), map->angle_3d.x);
+			rotate_yaxis(&(map->m3d[i][j]), map->angle_3d.y);
+			rotate_zaxis(&(map->m3d[i][j]), map->angle_3d.z);
 			j++;
 		}
 		i++;
@@ -158,6 +131,14 @@ void	draw_map(t_data *data)
 	}
 }
 
+void	draw_everthing(t_data *data)
+{
+	interpolate_3d(&(data->map));
+	draw_map(data);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
+	draw_info(data);
+}
+
 void	move_2d(int keycode, t_map *map)
 {
 	if (keycode == 13)
@@ -173,27 +154,35 @@ void	move_2d(int keycode, t_map *map)
 void	scale_2d(int keycode, t_map *map)
 {
 	if (keycode == 12)
-		map->scale *= 1.01;
+		map->scale *= 1.02;
 	else if (keycode == 14)
-		map->scale *= 0.99;
+		map->scale *= 0.98;
+}
+
+void	z_scale_3d(int keycode, t_map *map)
+{
+	if (keycode == 6)
+		map->z_scale += 0.08;
+	else if (keycode == 7)
+		map->z_scale -= 0.08;
 }
 
 void	rotate_3d(int keycode, t_map *map)
 {
-	double	delta = 2.5;
+	double	delta = 0.05;
 
 	if (keycode == 15)
-		rotate_3d_mode(map, 0, 1 * delta);
+		map->angle_3d.x += delta;
 	else if (keycode == 3)
-		rotate_3d_mode(map, 0, -1 * delta);
+		map->angle_3d.x -= delta;
 	else if (keycode == 17)
-		rotate_3d_mode(map, 1, 1 * delta);
+		map->angle_3d.y += delta;
 	else if (keycode == 5)
-		rotate_3d_mode(map, 1, -1 * delta);
+		map->angle_3d.y -= delta;
 	else if (keycode == 16)
-		rotate_3d_mode(map, 2, 1 * delta);
+		map->angle_3d.z += delta;
 	else if (keycode == 4)
-		rotate_3d_mode(map, 2, -1 * delta);
+		map->angle_3d.z -= delta;
 }
 
 int	keypress_event(int keycode, t_data *data)
@@ -207,11 +196,14 @@ int	keypress_event(int keycode, t_data *data)
 		move_2d(keycode, &(data->map));
 	else if (keycode == 12 || keycode == 14)
 		scale_2d(keycode, &(data->map));
+	else if (keycode == 6 || keycode == 7)
+		z_scale_3d(keycode, &(data->map));
 	else if (keycode == 15|| keycode == 3 || keycode == 17
 		|| keycode == 5 || keycode == 16 || keycode == 4)
 		rotate_3d(keycode, &(data->map));
-	draw_map(data);
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
+	else
+		return (0);
+	draw_everthing(data);
 	return (0);
 }
 
@@ -224,21 +216,8 @@ int	main(int argc, char **argv)
 	data.img = mlx_new_image(data.mlx, WIN_WIDTH, WIN_HEIGHT);
 	data.addr = mlx_get_data_addr(data.img, &data.bpp, &data.line_length,
 								&data.endian);
-
 	parse_map(argc, argv, &(data.map));
-	
-
-	data.map.offset_2d.x += 1000;
-	data.map.offset_2d.y += 500;
-	
-	rotate_3d_mode(&(data.map), 0, 35.264);
-	rotate_3d_mode(&(data.map), 1, 45);
-	rotate_3d_mode(&(data.map), 2, -35.264);
-	//rotate_3d_mode(&(data.map), 1, 180);
-	draw_map(&data);
-	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
-
+	draw_everthing(&data);
 	mlx_hook(data.mlx_win, 2, 0, &keypress_event, &data);
-	
 	mlx_loop(data.mlx);
 }

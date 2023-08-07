@@ -30,9 +30,12 @@ typedef struct	s_3d_p {
 typedef struct s_map {
 	int		height;
 	int		width;
+	t_3d_p	**default_m3d;
 	t_3d_p	**m3d;
+	t_3d_p	angle_3d;
 	t_3d_p	offset_2d;
 	double	scale;
+	double	z_scale;
 } t_map;
 
 typedef struct	s_data {
@@ -46,7 +49,7 @@ typedef struct	s_data {
 	t_map	map;
 }	t_data;
 
+void	draw_info(t_data *data);
 void	parse_map(int argc, char **argv, t_map *map);
-
 
 #endif
