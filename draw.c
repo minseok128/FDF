@@ -45,7 +45,6 @@ void	get_trigonometric(t_map *map, double *v)
 	v[5] = cos(map->angle_3d.z);
 }
 
-
 void	draw_everthing(t_data *data)
 {
 	double	v[6];
