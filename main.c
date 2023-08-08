@@ -198,7 +198,7 @@ double	get_distance_from_center(t_3d_p p1)
 	return (sqrt((p1.x * p1.x) + (p1.y * p1.y)));
 }
 
-void	first_draw(t_map *map)
+void	get_default_scale(t_map *map)
 {
 	int		i;
 	int		j;
@@ -228,19 +228,27 @@ void	first_draw(t_map *map)
 	map->scale = (WIN_HEIGHT / 2.5) / max_v;
 }
 
+void	system_init(char *addr, t_data *data)
+{
+	data->mlx = mlx_init();
+	data->mlx_win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, addr);
+	data->img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
+	data->addr = mlx_get_data_addr(data->img, &(data->bpp), &(data->line_length),
+								&(data->endian));
+	parse_map(addr, &(data->map));
+	get_default_scale(&(data->map));
+	draw_everthing(data);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	data.mlx = mlx_init();
-	data.mlx_win = mlx_new_window(data.mlx, WIN_WIDTH, WIN_HEIGHT, "Hello world!");
-	data.img = mlx_new_image(data.mlx, WIN_WIDTH, WIN_HEIGHT);
-	data.addr = mlx_get_data_addr(data.img, &data.bpp, &data.line_length,
-								&data.endian);
-	parse_map(argc, argv, &(data.map));
-	first_draw(&(data.map));
-	draw_everthing(&data);
-	mlx_hook(data.mlx_win, 2, 0, &keypress_event, &data);
-	mlx_hook(data.mlx_win, 17, 0, &leave_event, &data);
-	mlx_loop(data.mlx);
+	if (argc == 2)
+	{
+		system_init(argv[1], &data);
+		mlx_hook(data.mlx_win, 2, 0, &keypress_event, &data);
+		mlx_hook(data.mlx_win, 17, 0, &leave_event, &data);
+		mlx_loop(data.mlx);
+	}
 }

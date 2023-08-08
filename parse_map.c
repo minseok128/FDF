@@ -60,10 +60,8 @@ static void	get_map_info(int fd, t_map *map)
 	map->height = h;
 }
 
-static void	init_map(int argc, char *addr, int *fd, t_map *map)
+static void	init_map(char *addr, int *fd, t_map *map)
 {
-	if (argc < 2)
-		exit(0);
 	map->default_scale = 1;
 	map->scale = 1;
 	map->z_scale = 1;
@@ -130,7 +128,7 @@ static void	make_point(t_map *map, char *line, int i, int j)
 	map->max_z = fmax(map->max_z, (map->default_m3d)[i][j].z);
 }
 
-void	interpolate_z_value(t_map *map)
+static void	interpolate_z_value(t_map *map)
 {
 	int		i;
 	int		j;
@@ -146,14 +144,14 @@ void	interpolate_z_value(t_map *map)
 	}
 }
 
-void	parse_map(int argc, char **argv, t_map *map)
+void	parse_map(char *addr, t_map *map)
 {
 	int		i;
 	int		j;
 	char	**line;
 	int		fd;
 
-	init_map(argc, argv[1], &fd, map);
+	init_map(addr, &fd, map);
 	alloc_map(map);
 	i = -1;
 	while (++i < map->height)
@@ -171,10 +169,4 @@ void	parse_map(int argc, char **argv, t_map *map)
 	}
 	close(fd);
 	interpolate_z_value(map);
-	// for (int _i = 0; _i < map->height; _i++)
-	// {
-	// 	for (int _j = 0; _j < map->width; _j++)
-	// 		printf("%d\n", (map->m3d)[_i][_j].c);
-	// 	printf("\n");
-	// }
 }
