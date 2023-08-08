@@ -13,7 +13,7 @@ RMF = rm -f
 all : $(NAME)
 
 $(NAME) : $(OBJECTS)
-	$(CC) $(FLAGS) $(OBJECTS) -o $(NAME)
+	$(CC) $(CFLAGS) $(FLAGS) $(OBJECTS) -o $(NAME)
 
 %.o : %.c
 	$(CC) -c $(INC) $<
