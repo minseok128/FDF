@@ -31,15 +31,31 @@ void	system_init(char *addr, t_data *data)
 	draw_everthing(data);
 }
 
+int	is_valid_addr(char *addr)
+{
+	int	i;
+
+	i = ft_strlen(addr) - 1;
+	while (i >= 0 && addr[i] != '.')
+		i--;
+	if (i == -1)
+		return (0);
+	return ((addr + i)[0] == '.' && (addr + i)[1] == 'f'
+		&& (addr + i)[2] == 'd' && (addr + i)[3] == 'f');
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (argc == 2)
+	if (argc == 2 && is_valid_addr(argv[1]))
 	{
 		system_init(argv[1], &data);
 		mlx_hook(data.mlx_win, 2, 0, &keypress_event, &data);
 		mlx_hook(data.mlx_win, 17, 0, &leave_event, &data);
 		mlx_loop(data.mlx);
 	}
+	else
+		exit(1);
+	return (0);
 }

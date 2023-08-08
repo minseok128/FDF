@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror
 SRCS = fdf.c get_next_line.c get_next_line_utils.c draw_info.c bresenham_line.c \
 	interpolate_3d.c mini_libft1.c mini_libft2.c ft_split.c key_event.c draw.c \
 	parse_map1.c parse_map2.c
-NAME = FDF
+NAME = fdf
 OBJECTS = $(SRCS:.c=.o)
 OBJECTS2 = $(SRCS2:.c=.o)
 INC = -I./
