@@ -56,5 +56,6 @@ typedef struct	s_data {
 void	draw_info(t_data *data);
 void	parse_map(char *addr, t_map *map);
 void	bresenham_line(t_data *data, t_3d_p p1, t_3d_p p2);
+void	interpolate_3d(t_map *map);
 
 #endif
