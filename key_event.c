@@ -55,7 +55,7 @@ static void	set_scale(int keycode, t_map *map)
 		map->z_scale -= 0.08;
 }
 
-static void	change_view(int keycode, t_map *map)
+void	change_view(int keycode, t_map *map)
 {
 	map->scale = map->default_scale;
 	map->offset_2d.x = WIN_WIDTH / 2;

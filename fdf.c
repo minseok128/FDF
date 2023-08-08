@@ -27,7 +27,7 @@ void	system_init(char *addr, t_data *data)
 			&(data->line_length), &(data->endian));
 	parse_map(addr, &(data->map));
 	data->map.default_scale = get_default_scale(&(data->map));
-	data->map.scale = data->map.default_scale;
+	change_view(18, &(data->map));
 	draw_everthing(data);
 }
 
