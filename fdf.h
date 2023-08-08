@@ -37,6 +37,7 @@ typedef struct s_map {
 	t_3d_p	**m3d;
 	t_3d_p	angle_3d;
 	t_3d_p	offset_2d;
+	double	default_scale;
 	double	scale;
 	double	z_scale;
 }	t_map;

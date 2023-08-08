@@ -64,8 +64,9 @@ static void	init_map(int argc, char *addr, int *fd, t_map *map)
 {
 	if (argc < 2)
 		exit(0);
-	map->scale = 15;
-	map->z_scale = 0.5;
+	map->default_scale = 1;
+	map->scale = 1;
+	map->z_scale = 1;
 	map->min_z = 1.7976931348623157E+308;
 	map->max_z = -1.7976931348623157E+308;
 	map->offset_2d.x = WIN_WIDTH / 2;
@@ -123,7 +124,7 @@ static void	make_point(t_map *map, char *line, int i, int j)
 {
 	(map->default_m3d)[i][j].y = (i - (map->height / 2));
 	(map->default_m3d)[i][j].x = (j - (map->width / 2));
-	(map->default_m3d)[i][j].z = ft_atoi(line);
+	(map->default_m3d)[i][j].z = ft_atoi(line) / 2.0;
 	(map->default_m3d)[i][j].c = parse_color(line);
 	map->min_z = fmin(map->min_z, (map->default_m3d)[i][j].z);
 	map->max_z = fmax(map->max_z, (map->default_m3d)[i][j].z);
@@ -169,7 +170,6 @@ void	parse_map(int argc, char **argv, t_map *map)
 		free(line);
 	}
 	close(fd);
-	printf("inof_z:%f,%f\n", map->max_z, map->min_z);
 	interpolate_z_value(map);
 	// for (int _i = 0; _i < map->height; _i++)
 	// {

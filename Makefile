@@ -5,7 +5,6 @@ SRCS = main.c get_next_line.c get_next_line_utils.c parse_map.c draw_info.c bres
 NAME = FDF
 OBJECTS = $(SRCS:.c=.o)
 OBJECTS2 = $(SRCS2:.c=.o)
-ARRCS = ar rcus
 INC = -I./
 RMF = rm -f
 

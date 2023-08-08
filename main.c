@@ -12,35 +12,6 @@
 
 #include "fdf.h"
 
-
-
-// void	dda_line(t_data *data, t_3d_p p1, t_3d_p p2)
-// {
-// 	int steps;
-// 	double	x;
-// 	double	y;
-// 	double	x_inc;
-// 	double	y_inc;
-// 	if (!((p1.x >= 0 && p1.y >= 0 && WIN_HEIGHT > p1.y && WIN_WIDTH > p1.x)
-// 		|| (p2.x >= 0 && p2.y >= 0 && WIN_HEIGHT > p2.y && WIN_WIDTH > p2.x)))
-// 		return ;
-
-// 	interpolate_pixel(&(data->map), &p1);
-// 	interpolate_pixel(&(data->map), &p2);
-// 	x = p1.x;
-// 	y = p1.y;
-// 	steps = fmarr[0](fabs(p2.x - p1.x), fabs(p2.y - p1.y));
-// 	x_inc = (p2.x - p1.x) / steps;
-// 	y_inc = (p2.y - p1.y) / steps;
-// 	while (steps >= 0)
-// 	{	
-// 		my_mlx_pixel_put(data, round(x), round(y), p1.c);
-// 		x += x_inc;
-// 		y += y_inc;
-// 		steps--;
-// 	}
-// }
-
 void	rotate_xaxis(t_3d_p *p, double theta)
 {
 	t_3d_p	p2;
@@ -106,7 +77,6 @@ void	draw_map(t_data *data)
 	{
 		j = -1;
 		while (++j < data->map.width - 1)
-			// dda_line(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
 			bresenham_line(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
 	}
 	i = -1;
@@ -114,7 +84,6 @@ void	draw_map(t_data *data)
 	{
 		j = -1;
 		while (++j < data->map.height - 1)
-			// dda_line(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
 			bresenham_line(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
 	}
 }
@@ -175,7 +144,7 @@ void	rotate_3d(int keycode, t_map *map)
 
 void change_view(int keycode, t_map *map)
 {
-	map->scale = 15;
+	map->scale = map->default_scale;
 	map->offset_2d.x = WIN_WIDTH / 2;
 	map->offset_2d.y = WIN_HEIGHT / 2;
 	map->angle_3d.x = 0;
@@ -224,6 +193,41 @@ int	leave_event(int keycode, t_data *data)
 	return (0);
 }
 
+double	get_distance_from_center(t_3d_p p1)
+{
+	return (sqrt((p1.x * p1.x) + (p1.y * p1.y)));
+}
+
+void	first_draw(t_map *map)
+{
+	int		i;
+	int		j;
+	int		max_i;
+	int		max_j;
+	double	max_v;
+
+	interpolate_3d(map);
+	max_i = 0;
+	max_j = 0;
+	max_v = 0;
+	i = -1;
+	while (++i < (map->height))
+	{
+		j = -1;
+		while (++j < (map->width))
+		{
+			if (max_v < get_distance_from_center((map->m3d)[i][j]))
+			{
+				max_i = i;
+				max_j = j;
+				max_v = get_distance_from_center((map->m3d)[i][j]);
+			}
+		}
+	}
+	map->default_scale = (WIN_HEIGHT / 2.5) / max_v;
+	map->scale = (WIN_HEIGHT / 2.5) / max_v;
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -234,6 +238,7 @@ int	main(int argc, char **argv)
 	data.addr = mlx_get_data_addr(data.img, &data.bpp, &data.line_length,
 								&data.endian);
 	parse_map(argc, argv, &(data.map));
+	first_draw(&(data.map));
 	draw_everthing(&data);
 	mlx_hook(data.mlx_win, 2, 0, &keypress_event, &data);
 	mlx_hook(data.mlx_win, 17, 0, &leave_event, &data);
