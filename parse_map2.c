@@ -69,13 +69,14 @@ double	get_default_scale(t_map *map)
 {
 	int		i;
 	int		j;
-	int		max_i;
-	int		max_j;
+	int		max[2];
+	double	v[6];
 	double	max_v;
 
-	interpolate_3d(map);
-	max_i = 0;
-	max_j = 0;
+	get_trigonometric(map, v);
+	interpolate_3d(map, v);
+	max[0] = 0;
+	max[1] = 0;
 	max_v = 0;
 	i = -1;
 	while (++i < (map->height))
@@ -85,8 +86,8 @@ double	get_default_scale(t_map *map)
 		{
 			if (max_v < get_distance_from_center((map->m3d)[i][j]))
 			{
-				max_i = i;
-				max_j = j;
+				max[0] = i;
+				max[1] = j;
 				max_v = get_distance_from_center((map->m3d)[i][j]);
 			}
 		}

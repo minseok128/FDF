@@ -110,12 +110,10 @@ void	parse_map(char *addr, t_map *map)
 	while (++i < map->height)
 	{
 		line = get_next_line(fd);
-		if (!line)
-			exit(1);
 		arr = ft_split(line, ' ');
-		free(line);
-		if (!arr)
+		if (!arr || !line)
 			exit(1);
+		free(line);
 		j = -1;
 		while (++j < map->width)
 		{

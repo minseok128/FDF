@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: michang <michang@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/08 16:41:19 by michang           #+#    #+#             */
-/*   Updated: 2023/08/08 16:41:20 by michang          ###   ########.fr       */
+/*   Created: 2023/08/08 22:47:39 by michang           #+#    #+#             */
+/*   Updated: 2023/08/08 22:47:40 by michang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,28 @@ static void	rotate_zaxis(t_3d_p *p, double theta)
 	p->y = p2.x * sin(theta) + p2.y * cos(theta);
 }
 
-void	interpolate_3d(t_map *map)
+void	interpolate_3d(t_map *map, double v[])
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	t_3d_p	p2;
 
-	i = 0;
-	while (i < (map->height))
+	i = -1;
+	while (++i < (map->height))
 	{
-		j = 0;
-		while (j < (map->width))
+		j = -1;
+		while (++j < (map->width))
 		{
 			map->m3d[i][j] = map->default_m3d[i][j];
 			map->m3d[i][j].z *= map->z_scale;
-			rotate_xaxis(&(map->m3d[i][j]), map->angle_3d.x);
-			rotate_yaxis(&(map->m3d[i][j]), map->angle_3d.y);
-			rotate_zaxis(&(map->m3d[i][j]), map->angle_3d.z);
-			j++;
+			map->m3d[i][j].y = p2.y * v[1] - p2.z * v[0];
+            map->m3d[i][j].z = p2.y * v[0] + p2.z * v[1];
+            p2 = map->m3d[i][j];
+            map->m3d[i][j].x = p2.x * v[3] + p2.z * v[2];
+            map->m3d[i][j].z = p2.z * v[3] - p2.x * v[2];
+            p2 = map->m3d[i][j];
+            map->m3d[i][j].x = p2.x * v[5] - p2.y * v[4];
+            map->m3d[i][j].y = p2.x * v[4] + p2.y * v[5];
 		}
-		i++;
 	}
 }

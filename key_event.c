@@ -17,6 +17,7 @@ int	leave_event(int keycode, t_data *data)
 	exit(0);
 	return (0);
 }
+
 static void	set_rotate_or_move(int keycode, t_map *map)
 {
 	double	delta;

@@ -74,7 +74,7 @@ char	*ft_itoa(int n);
 void	draw_info(t_data *data);
 void	parse_map(char *addr, t_map *map);
 void	bresenham_line(t_data *data, t_3d_p p1, t_3d_p p2);
-void	interpolate_3d(t_map *map);
+void	interpolate_3d(t_map *map, double v[]);
 int		keypress_event(int keycode, t_data *data);
 void	draw_everthing(t_data *data);
 void	make_point(t_map *map, char *line, int i, int j);
@@ -82,5 +82,8 @@ void	interpolate_z_value(t_map *map);
 double	get_default_scale(t_map *map);
 void	change_view(int keycode, t_map *map);
 int		leave_event(int keycode, t_data *data);
+
+void	get_trigonometric(t_map *map, double *value);
+void	bresenham(t_data *data, t_3d_p p1, t_3d_p p2);
 
 #endif

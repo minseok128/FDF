@@ -98,6 +98,8 @@ char	**ft_split(const char *str, char c)
 	int		arr_size;
 	char	**result;
 
+	if (!str)
+		return (0);
 	arr_size = ft_get_size_of_arr((char *)str, c) + 1;
 	result = (char **)ft_calloc(arr_size, sizeof(char *));
 	if (!result)
