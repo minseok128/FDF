@@ -12,13 +12,7 @@
 
 #include "fdf.h"
 
-int	leave_event(int keycode, t_data *data)
-{
-	exit(0);
-	return (0);
-}
-
-void	system_init(char *addr, t_data *data)
+static void	system_init(char *addr, t_data *data)
 {
 	data->mlx = mlx_init();
 	data->mlx_win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, addr);
@@ -31,23 +25,27 @@ void	system_init(char *addr, t_data *data)
 	draw_everthing(data);
 }
 
-int	is_valid_addr(char *addr)
+static int	is_valid_addr(char *addr)
 {
 	int	i;
 
 	i = ft_strlen(addr) - 1;
-	while (i >= 0 && addr[i] != '.')
-		i--;
-	if (i == -1)
+	if (i < 4)
 		return (0);
-	return ((addr + i)[0] == '.' && (addr + i)[1] == 'f'
-		&& (addr + i)[2] == 'd' && (addr + i)[3] == 'f');
+	return (addr[i - 3] == '.' && addr[i - 2] == 'f'
+		&& addr[i - 1] == 'd' && addr[i] == 'f');
+}
+
+void	check_leak(void)
+{
+	system("leaks --list -- fdf");
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	atexit(check_leak);
 	if (argc == 2 && is_valid_addr(argv[1]))
 	{
 		system_init(argv[1], &data);
@@ -57,5 +55,5 @@ int	main(int argc, char **argv)
 	}
 	else
 		exit(1);
-	return (0);
+	exit (0);
 }

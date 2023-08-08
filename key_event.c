@@ -12,19 +12,12 @@
 
 #include "fdf.h"
 
-static void	set_move_2d(int keycode, t_map *map)
+int	leave_event(int keycode, t_data *data)
 {
-	if (keycode == 13)
-		map->offset_2d.y -= 10;
-	else if (keycode == 1)
-		map->offset_2d.y += 10;
-	else if (keycode == 0)
-		map->offset_2d.x -= 10;
-	else if (keycode == 2)
-		map->offset_2d.x += 10;
+	exit(0);
+	return (0);
 }
-
-static void	set_rotate_3d(int keycode, t_map *map)
+static void	set_rotate_or_move(int keycode, t_map *map)
 {
 	double	delta;
 
@@ -41,6 +34,14 @@ static void	set_rotate_3d(int keycode, t_map *map)
 		map->angle_3d.z += delta;
 	else if (keycode == 4)
 		map->angle_3d.z -= delta;
+	else if (keycode == 13)
+		map->offset_2d.y -= 10;
+	else if (keycode == 1)
+		map->offset_2d.y += 10;
+	else if (keycode == 0)
+		map->offset_2d.x -= 10;
+	else if (keycode == 2)
+		map->offset_2d.x += 10;
 }
 
 static void	set_scale(int keycode, t_map *map)
@@ -81,14 +82,12 @@ int	keypress_event(int keycode, t_data *data)
 	ft_bzero(data->addr, (WIN_HEIGHT) * (WIN_WIDTH) * (data->bpp / 8));
 	if (keycode == 53)
 		exit(0);
-	else if (keycode == 0 || keycode == 1
-		|| keycode == 2 || keycode == 13)
-		set_move_2d(keycode, &(data->map));
+	else if (keycode == 0 || keycode == 1 || keycode == 2 || keycode == 13
+		|| keycode == 15 || keycode == 3 || keycode == 17 || keycode == 5
+		|| keycode == 16 || keycode == 4)
+		set_rotate_or_move(keycode, &(data->map));
 	else if (keycode == 12 || keycode == 14 || keycode == 6 || keycode == 7)
 		set_scale(keycode, &(data->map));
-	else if (keycode == 15 || keycode == 3 || keycode == 17 || keycode == 5
-		|| keycode == 16 || keycode == 4)
-		set_rotate_3d(keycode, &(data->map));
 	else if (keycode >= 18 && keycode <= 21)
 		change_view(keycode, &(data->map));
 	else

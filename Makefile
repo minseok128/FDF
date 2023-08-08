@@ -1,6 +1,6 @@
 CC = gcc
 FLAGS = -L ./minilibx_mms_20210621 -lmlx -framework OpenGL -framework Appkit -lz
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 SRCS = fdf.c get_next_line.c get_next_line_utils.c draw_info.c bresenham_line.c \
 	interpolate_3d.c mini_libft1.c mini_libft2.c ft_split.c key_event.c draw.c \
 	parse_map1.c parse_map2.c

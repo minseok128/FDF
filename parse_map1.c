@@ -100,7 +100,8 @@ void	parse_map(char *addr, t_map *map)
 {
 	int		i;
 	int		j;
-	char	**line;
+	char	**arr;
+	char	*line;
 	int		fd;
 
 	init_map(addr, &fd, map);
@@ -108,16 +109,21 @@ void	parse_map(char *addr, t_map *map)
 	i = -1;
 	while (++i < map->height)
 	{
-		line = ft_split(get_next_line(fd), ' ');
+		line = get_next_line(fd);
 		if (!line)
+			exit(1);
+		arr = ft_split(line, ' ');
+		free(line);
+		if (!arr)
 			exit(1);
 		j = -1;
 		while (++j < map->width)
 		{
-			make_point(map, line[j], i, j);
-			free(line[j]);
+			make_point(map, arr[j], i, j);
+			free(arr[j]);
 		}
-		free(line);
+		free(arr[j]);
+		free(arr);
 	}
 	close(fd);
 	interpolate_z_value(map);

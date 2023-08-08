@@ -81,5 +81,6 @@ void	make_point(t_map *map, char *line, int i, int j);
 void	interpolate_z_value(t_map *map);
 double	get_default_scale(t_map *map);
 void	change_view(int keycode, t_map *map);
+int		leave_event(int keycode, t_data *data);
 
 #endif
