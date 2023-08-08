@@ -12,8 +12,8 @@
 
 #ifndef FDF_H
 # define FDF_H
-# define WIN_WIDTH 1980
-# define WIN_HEIGHT 1024
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 # include "./minilibx_mms_20210621/mlx.h"
 # include "./get_next_line.h"
 # include <fcntl.h>
@@ -25,18 +25,21 @@ typedef struct	s_3d_p {
 	double	x;
 	double	y;
 	double	z;
+	int		c;
 }	t_3d_p;
 
 typedef struct s_map {
 	int		height;
 	int		width;
+	double	max_z;
+	double	min_z;
 	t_3d_p	**default_m3d;
 	t_3d_p	**m3d;
 	t_3d_p	angle_3d;
 	t_3d_p	offset_2d;
 	double	scale;
 	double	z_scale;
-} t_map;
+}	t_map;
 
 typedef struct	s_data {
 	void	*mlx;
