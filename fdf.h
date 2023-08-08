@@ -12,19 +12,19 @@
 
 #ifndef FDF_H
 # define FDF_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
-# define WIN_WIDTH 1920
-# define WIN_HEIGHT 1080
 # include "./minilibx_mms_20210621/mlx.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
 # include <stdlib.h>
 # include <unistd.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 
-typedef struct	s_3d_p {
+typedef struct s_3d_p {
 	double	x;
 	double	y;
 	double	z;
@@ -45,7 +45,7 @@ typedef struct s_map {
 	double	z_scale;
 }	t_map;
 
-typedef struct	s_data {
+typedef struct s_data {
 	void	*mlx;
 	void	*mlx_win;
 	void	*img;
@@ -75,5 +75,10 @@ void	draw_info(t_data *data);
 void	parse_map(char *addr, t_map *map);
 void	bresenham_line(t_data *data, t_3d_p p1, t_3d_p p2);
 void	interpolate_3d(t_map *map);
+int		keypress_event(int keycode, t_data *data);
+void	draw_everthing(t_data *data);
+void	make_point(t_map *map, char *line, int i, int j);
+void	interpolate_z_value(t_map *map);
+double	get_default_scale(t_map *map);
 
 #endif

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_map.c                                        :+:      :+:    :+:   */
+/*   parse_map1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michang <michang@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -78,28 +78,6 @@ static void	init_map(char *addr, int *fd, t_map *map)
 	*fd = open(addr, O_RDONLY);
 }
 
-static int	parse_color(char *line)
-{
-	int	res;
-	int	i;
-
-	line = ft_strchr(line, ',');
-	if (!line)
-		return (0x00FFFFFF);
-	res = 0;
-	i = 2;
-	while (line[i])
-	{
-		res *= 16;
-		if (ft_isalpha(line[i]))
-			res += 10 + (ft_tolower(line[i]) - 'a');
-		else if (line[i] >= '0' && line[i] <= '9')
-			res += line[i] - '0';
-		i++;
-	}
-	return (res);
-}
-
 static void	alloc_map(t_map *map)
 {
 	int	i;
@@ -115,32 +93,6 @@ static void	alloc_map(t_map *map)
 		(map->m3d)[i] = malloc(sizeof(t_3d_p) * map->width);
 		if (!((map->m3d)[i]) || !((map->default_m3d)[i]))
 			exit(1);
-	}
-}
-
-static void	make_point(t_map *map, char *line, int i, int j)
-{
-	(map->default_m3d)[i][j].y = (i - (map->height / 2));
-	(map->default_m3d)[i][j].x = (j - (map->width / 2));
-	(map->default_m3d)[i][j].z = ft_atoi(line) / 2.0;
-	(map->default_m3d)[i][j].c = parse_color(line);
-	map->min_z = fmin(map->min_z, (map->default_m3d)[i][j].z);
-	map->max_z = fmax(map->max_z, (map->default_m3d)[i][j].z);
-}
-
-static void	interpolate_z_value(t_map *map)
-{
-	int		i;
-	int		j;
-	double	weight_z;
-
-	weight_z = (map->max_z - map->min_z) / 2;
-	i = -1;
-	while (++i < map->height)
-	{
-		j = -1;
-		while (++j < map->width)
-			(map-> default_m3d)[i][j].z -= weight_z;
 	}
 }
 
