@@ -93,7 +93,7 @@ static int	parse_color(char *line)
 		res *= 16;
 		if (ft_isalpha(line[i]))
 			res += 10 + (ft_tolower(line[i]) - 'a');
-		else if (ft_isdigit(line[i]))
+		else if (line[i] >= '0' && line[i] <= '9')
 			res += line[i] - '0';
 		i++;
 	}

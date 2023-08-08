@@ -12,14 +12,17 @@
 
 #ifndef FDF_H
 # define FDF_H
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
 # include "./minilibx_mms_20210621/mlx.h"
-# include "./get_next_line.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
-# include "./libft/libft.h"
+# include <stdlib.h>
+# include <unistd.h>
 
 typedef struct	s_3d_p {
 	double	x;
@@ -53,6 +56,21 @@ typedef struct	s_data {
 	t_map	map;
 }	t_data;
 
+char	*get_next_line(int fd);
+int		ft_tolower(int c);
+char	*ft_strjoin_gnl(char **s1, char *s2);
+char	*freeing(char **backup);
+size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *str, int c);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+
+char	*ft_strjoin(char const *s1, char const *s2);
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t count, size_t size);
+int		ft_isalpha(int c);
+char	**ft_split(const char *str, char c);
+int		ft_atoi(const char *str);
+char	*ft_itoa(int n);
 void	draw_info(t_data *data);
 void	parse_map(char *addr, t_map *map);
 void	bresenham_line(t_data *data, t_3d_p p1, t_3d_p p2);
