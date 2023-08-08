@@ -1,7 +1,7 @@
 CC = gcc
 FLAGS = -L ./minilibx_mms_20210621 -lmlx -framework OpenGL -framework Appkit -lz
 CFLAGS = -Wall -Wextra -Werror
-SRCS = main.c get_next_line.c get_next_line_utils.c parse_map.c draw_info.c
+SRCS = main.c get_next_line.c get_next_line_utils.c parse_map.c draw_info.c bresenham_line.c
 NAME = FDF
 OBJECTS = $(SRCS:.c=.o)
 OBJECTS2 = $(SRCS2:.c=.o)

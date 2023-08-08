@@ -141,10 +141,7 @@ void	interpolate_z_value(t_map *map)
 	{
 		j = -1;
 		while (++j < map->width)
-		{
 			(map-> default_m3d)[i][j].z -= weight_z;
-			printf("%f\n", (map-> default_m3d)[i][j].z);
-		}
 	}
 }
 

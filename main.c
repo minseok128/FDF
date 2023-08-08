@@ -12,22 +12,7 @@
 
 #include "fdf.h"
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
 
-	if ((x >= 0 && y >= 0) && (WIN_HEIGHT > y && WIN_WIDTH > x))
-	{
-		dst = data->addr + (y * data->line_length + x * (data->bpp / 8));
-		*(unsigned int*)dst = color;
-	}
-}
-
-void	interpolate_pixel(t_map *map, t_3d_p *p1)
-{
-	p1->x = (p1->x * map->scale + map->offset_2d.x);
-	p1->y = (p1->y * map->scale + map->offset_2d.y);
-}
 
 // void	dda_line(t_data *data, t_3d_p p1, t_3d_p p2)
 // {
@@ -36,12 +21,15 @@ void	interpolate_pixel(t_map *map, t_3d_p *p1)
 // 	double	y;
 // 	double	x_inc;
 // 	double	y_inc;
+// 	if (!((p1.x >= 0 && p1.y >= 0 && WIN_HEIGHT > p1.y && WIN_WIDTH > p1.x)
+// 		|| (p2.x >= 0 && p2.y >= 0 && WIN_HEIGHT > p2.y && WIN_WIDTH > p2.x)))
+// 		return ;
 
 // 	interpolate_pixel(&(data->map), &p1);
 // 	interpolate_pixel(&(data->map), &p2);
 // 	x = p1.x;
 // 	y = p1.y;
-// 	steps = fmax(fabs(p2.x - p1.x), fabs(p2.y - p1.y));
+// 	steps = fmarr[0](fabs(p2.x - p1.x), fabs(p2.y - p1.y));
 // 	x_inc = (p2.x - p1.x) / steps;
 // 	y_inc = (p2.y - p1.y) / steps;
 // 	while (steps >= 0)
@@ -52,53 +40,6 @@ void	interpolate_pixel(t_map *map, t_3d_p *p1)
 // 		steps--;
 // 	}
 // }
-
-void	dda_line2(t_data *data, t_3d_p p1, t_3d_p p2)
-{
-	interpolate_pixel(&(data->map), &p1);
-	interpolate_pixel(&(data->map), &p2);
-	// if (!((p1.x >= 0 && p1.y >= 0 && WIN_HEIGHT > p1.y && WIN_WIDTH > p1.x)
-	// 	|| (p2.x >= 0 && p2.y >= 0 && WIN_HEIGHT > p2.y && WIN_WIDTH > p2.x)))
-	// 	return ;
-	int aX=0, aY=0;
-	int cnt = 0;
-	int dx = p2.x-p1.x;
-	int dy = p2.y-p1.y;
-
-	if(dx < 0) {aX = -1; dx = -dx;}
-	else aX = 1;
-	if(dy < 0) {aY = -1; dy = -dy;}
-	else aY = 1;
-		
-	int x = p1.x;
-	int y = p1.y;
-	if(dx >= dy)
-	{
-		for(int i = 0 ; i < dx ; i++)
-		{
-			x += aX;
-			cnt += dy;
-			if(cnt >= dx)
-			{
-				y += aY; cnt -= dx;
-			}
-			my_mlx_pixel_put(data, x, y, p1.c);
-		}
-	}
-	else
-	{
-		for(int i = 0 ; i < dy ; i++)
-		{
-			y+= aY;
-			cnt += dx;
-			if(cnt >= dy)
-			{
-				x += aX; cnt -= dy;
-			}
-			my_mlx_pixel_put(data, x, y, p1.c);
-		}
-	}
-}
 
 void	rotate_xaxis(t_3d_p *p, double theta)
 {
@@ -166,7 +107,7 @@ void	draw_map(t_data *data)
 		j = -1;
 		while (++j < data->map.width - 1)
 			// dda_line(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
-			dda_line2(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
+			bresenham_line(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
 	}
 	i = -1;
 	while (++i < data->map.width)
@@ -174,7 +115,7 @@ void	draw_map(t_data *data)
 		j = -1;
 		while (++j < data->map.height - 1)
 			// dda_line(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
-			dda_line2(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
+			bresenham_line(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
 	}
 }
 
