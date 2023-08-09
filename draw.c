@@ -37,7 +37,7 @@ static void	draw_map(t_data *data)
 	{
 		arr[3] = -1;
 		while (++arr[3] < arr[1] - 1)
-			bresenham_line(data, interpolate_2d(m3dp[arr[2]][arr[3]], scale, offset_2d),
+			bresenham(data, interpolate_2d(m3dp[arr[2]][arr[3]], scale, offset_2d),
 				interpolate_2d(m3dp[arr[2]][arr[3] + 1], scale, offset_2d));
 	}
 	arr[2] = -1;
@@ -45,7 +45,7 @@ static void	draw_map(t_data *data)
 	{
 		arr[3] = -1;
 		while (++arr[3] < arr[0] - 1)
-			bresenham_line(data, interpolate_2d(m3dp[arr[3]][arr[2]], scale, offset_2d),
+			bresenham(data, interpolate_2d(m3dp[arr[3]][arr[2]], scale, offset_2d),
 				interpolate_2d(m3dp[arr[3] + 1][arr[2]], scale, offset_2d));
 	}
 	//printf("%f %f %f\n", (m3dp)[0][0].x, (m3dp)[0][0].y, (m3dp)[0][0].z);

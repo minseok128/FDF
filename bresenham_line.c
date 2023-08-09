@@ -98,8 +98,17 @@ void	bresenham_line(t_data *data, t_3d_p p1, t_3d_p p2)
 	bresenham_line1(data, arr, p1);
 }
 
-void	bresenham(t_data *data, t_3d_p p1, t_3d_p p2)
+void	set_bresenham()
 {
+	arr[0] = round(p1.x);
+	arr[1] = round(p1.y);
+	arr[2] = round(p2.x);
+	arr[3] = round(p2.y);
+	arr[4] = abs(x2 - x1);
+	arr[5] = abs(y2 - y1);
+	arr[6] = (x1 < x2) * -2 + 1;;
+	arr[7] = 
+	arr[8] = 
 	int x1 = round(p1.x);
 	int y1 = round(p1.y);
 	int x2 = round(p2.x);
@@ -109,6 +118,11 @@ void	bresenham(t_data *data, t_3d_p p1, t_3d_p p2)
 	int sx = (x1 < x2) ? 1 : -1;
 	int sy = (y1 < y2) ? 1 : -1;
 	int err = dx - dy;
+}
+
+void	bresenham(t_data *data, t_3d_p p1, t_3d_p p2)
+{
+	int	arr[9];
 	while (1)
 	{
 		my_mlx_pixel_put(data, x1, y1, p1.c);
