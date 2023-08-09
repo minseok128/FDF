@@ -34,7 +34,7 @@ static char	*ft_get_word(char *str, char c)
 	return (word);
 }
 
-static int	ft_get_size_of_arr(char *str, char c)
+int	ft_get_size_of_arr(char *str, char c)
 {
 	int	i;
 	int	size;

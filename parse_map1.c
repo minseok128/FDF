@@ -12,27 +12,6 @@
 
 #include "fdf.h"
 
-static int	get_map_width(char *line)
-{
-	int	w;
-	int	i;
-
-	w = 0;
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == ' ')
-		{
-			w++;
-			i++;
-			while (line[i] == ' ')
-				i++;
-		}
-		i++;
-	}
-	return (w);
-}
-
 static void	get_map_info(int fd, t_map *map)
 {
 	int		h;
@@ -41,7 +20,7 @@ static void	get_map_info(int fd, t_map *map)
 	line = get_next_line(fd);
 	if (!line)
 		exit(1);
-	map->width = get_map_width(line);
+	map->width = ft_get_size_of_arr(line, ' ');
 	h = (int)freeing(&line);
 	while ((int)line != -1)
 	{

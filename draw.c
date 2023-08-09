@@ -12,27 +12,43 @@
 
 #include "fdf.h"
 
+static t_3d_p interpolate_2d(t_3d_p p1, double scale, t_3d_p offset_2d)
+{
+	p1.x = (p1.x * scale + offset_2d.x);
+	p1.y = (p1.y * scale + offset_2d.y);
+	return (p1);
+}
+
 static void	draw_map(t_data *data)
 {
-	int	i;
-	int	j;
+	int		arr[4];
+	t_3d_p	**m3dp;
+	double	scale;
+	t_3d_p	offset_2d;
 
-	i = -1;
-	while (++i < data->map.height)
+	ft_bzero(data->addr, (WIN_HEIGHT) * (WIN_WIDTH) * (data->bpp / 8));
+	m3dp = data->map.m3d;
+	arr[0] = data->map.height;
+	arr[1] = data->map.width;
+	scale = data->map.scale;
+	offset_2d = data->map.offset_2d;
+	arr[2] = -1;
+	while (++arr[2] < arr[0])
 	{
-		j = -1;
-		while (++j < data->map.width - 1)
-			//bresenham_line(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
-			bresenham(data, data->map.m3d[i][j], data->map.m3d[i][j + 1]);
+		arr[3] = -1;
+		while (++arr[3] < arr[1] - 1)
+			bresenham_line(data, interpolate_2d(m3dp[arr[2]][arr[3]], scale, offset_2d),
+				interpolate_2d(m3dp[arr[2]][arr[3] + 1], scale, offset_2d));
 	}
-	i = -1;
-	while (++i < data->map.width)
+	arr[2] = -1;
+	while (++arr[2] < arr[1])
 	{
-		j = -1;
-		while (++j < data->map.height - 1)
-			//bresenham_line(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
-			bresenham(data, data->map.m3d[j][i], data->map.m3d[j + 1][i]);
+		arr[3] = -1;
+		while (++arr[3] < arr[0] - 1)
+			bresenham_line(data, interpolate_2d(m3dp[arr[3]][arr[2]], scale, offset_2d),
+				interpolate_2d(m3dp[arr[3] + 1][arr[2]], scale, offset_2d));
 	}
+	//printf("%f %f %f\n", (m3dp)[0][0].x, (m3dp)[0][0].y, (m3dp)[0][0].z);
 }
 
 void	get_trigonometric(t_map *map, double *v)

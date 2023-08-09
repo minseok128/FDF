@@ -45,7 +45,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	atexit(check_leak);
+	//atexit(check_leak);
 	if (argc == 2 && is_valid_addr(argv[1]))
 	{
 		system_init(argv[1], &data);

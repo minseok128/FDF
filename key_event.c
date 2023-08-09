@@ -80,7 +80,6 @@ void	change_view(int keycode, t_map *map)
 
 int	keypress_event(int keycode, t_data *data)
 {
-	ft_bzero(data->addr, (WIN_HEIGHT) * (WIN_WIDTH) * (data->bpp / 8));
 	if (keycode == 53)
 		exit(0);
 	else if (keycode == 0 || keycode == 1 || keycode == 2 || keycode == 13

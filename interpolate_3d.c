@@ -12,29 +12,37 @@
 
 #include "fdf.h"
 
+static void	set_interpolate_3d(t_map *map, t_3d_p ***m3dp, int *arr)
+{
+	*m3dp = map->m3d;
+	arr[0] = map->height;
+	arr[1] = map->width;
+	arr[2] = -1;
+}
+
 void	interpolate_3d(t_map *map, double v[])
 {
-	int		i;
-	int		j;
+	int		arr[4];
 	t_3d_p	p2;
+	t_3d_p	**m3dp;
 
-	i = -1;
-	while (++i < (map->height))
+	set_interpolate_3d(map, &m3dp, arr);
+	while (++arr[2] < arr[0])
 	{
-		j = -1;
-		while (++j < (map->width))
+		arr[3] = -1;
+		while (++arr[3] < arr[1])
 		{
-			map->m3d[i][j] = map->default_m3d[i][j];
-			map->m3d[i][j].z *= map->z_scale;
-			p2 = map->m3d[i][j];
-			map->m3d[i][j].y = p2.y * v[1] - p2.z * v[0];
-			map->m3d[i][j].z = p2.y * v[0] + p2.z * v[1];
-			p2 = map->m3d[i][j];
-			map->m3d[i][j].x = p2.x * v[3] + p2.z * v[2];
-			map->m3d[i][j].z = p2.z * v[3] - p2.x * v[2];
-			p2 = map->m3d[i][j];
-			map->m3d[i][j].x = p2.x * v[5] - p2.y * v[4];
-			map->m3d[i][j].y = p2.x * v[4] + p2.y * v[5];
+			m3dp[arr[2]][arr[3]] = map->default_m3d[arr[2]][arr[3]];
+			m3dp[arr[2]][arr[3]].z *= map->z_scale;
+			p2 = m3dp[arr[2]][arr[3]];
+			m3dp[arr[2]][arr[3]].y = p2.y * v[1] - p2.z * v[0];
+			m3dp[arr[2]][arr[3]].z = p2.y * v[0] + p2.z * v[1];
+			p2 = m3dp[arr[2]][arr[3]];
+			m3dp[arr[2]][arr[3]].x = p2.x * v[3] + p2.z * v[2];
+			m3dp[arr[2]][arr[3]].z = p2.z * v[3] - p2.x * v[2];
+			p2 = m3dp[arr[2]][arr[3]];
+			m3dp[arr[2]][arr[3]].x = p2.x * v[5] - p2.y * v[4];
+			m3dp[arr[2]][arr[3]].y = p2.x * v[4] + p2.y * v[5];
 		}
 	}
 }
