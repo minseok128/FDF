@@ -38,21 +38,21 @@ void	set_bresenham(int *arr, t_3d_p p1, t_3d_p p2)
 
 void	bresenham(t_data *data, t_3d_p p1, t_3d_p p2)
 {
-	int	arr[9];
+	int	arr[10];
 
 	set_bresenham(arr, p1, p2);
 	while (1)
 	{
 		my_mlx_pixel_put(data, arr[0], arr[1], p1.c);
 		if (arr[0] == arr[2] && arr[1] == arr[3])
-			break;
-		int e2 = 2 * arr[8];
-		if (e2 > -arr[5])
+			break ;
+		arr[9] = 2 * arr[8];
+		if (arr[9] > -arr[5])
 		{
 			arr[8] -= arr[5];
 			arr[0] += arr[6];
 		}
-		if (e2 < arr[4])
+		if (arr[9] < arr[4])
 		{
 			arr[8] += arr[4];
 			arr[1] += arr[7];
