@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   draw_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michang <michang@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/08 17:33:33 by michang           #+#    #+#             */
-/*   Updated: 2023/08/08 17:33:34 by michang          ###   ########.fr       */
+/*   Created: 2023/08/13 20:01:51 by michang           #+#    #+#             */
+/*   Updated: 2023/08/13 20:01:54 by michang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 static t_3d_p	interpolate_2d(t_3d_p p1, double scale, t_3d_p offset_2d)
 {
@@ -19,25 +19,37 @@ static t_3d_p	interpolate_2d(t_3d_p p1, double scale, t_3d_p offset_2d)
 	return (p1);
 }
 
-static void	draw_map(t_data *data)
+static t_trick	set_trick(int *arr, char *addr, t_map *map)
+{
+	t_trick	t;
+
+	ft_bzero(addr, (WIN_HEIGHT) * (WIN_WIDTH) * (map->bpp / 8));
+	arr[0] = map->height;
+	arr[1] = map->width;
+	arr[2] = -1;
+	t.addr = addr;
+	t.ll = map->line_length;
+	t.bpp = map->bpp;
+	return (t);
+}
+
+static void	draw_map(t_map *map, char *addr)
 {
 	int		arr[4];
 	t_3d_p	**m3dp;
 	double	s;
 	t_3d_p	offset_2d;
+	t_trick	t;
 
-	ft_bzero(data->addr, (WIN_HEIGHT) * (WIN_WIDTH) * (data->bpp / 8));
-	m3dp = data->map.m3d;
-	arr[0] = data->map.height;
-	arr[1] = data->map.width;
-	s = data->map.scale;
-	offset_2d = data->map.offset_2d;
-	arr[2] = -1;
+	t = set_trick(arr, addr, map);
+	m3dp = map->m3d;
+	s = map->scale;
+	offset_2d = map->offset_2d;
 	while (++arr[2] < arr[0])
 	{
 		arr[3] = -1;
 		while (++arr[3] < arr[1] - 1)
-			bresenham(data, interpolate_2d(m3dp[arr[2]][arr[3]], s, offset_2d),
+			bresenham(t, interpolate_2d(m3dp[arr[2]][arr[3]], s, offset_2d),
 				interpolate_2d(m3dp[arr[2]][arr[3] + 1], s, offset_2d));
 	}
 	arr[2] = -1;
@@ -45,7 +57,7 @@ static void	draw_map(t_data *data)
 	{
 		arr[3] = -1;
 		while (++arr[3] < arr[0] - 1)
-			bresenham(data, interpolate_2d(m3dp[arr[3]][arr[2]], s, offset_2d),
+			bresenham(t, interpolate_2d(m3dp[arr[3]][arr[2]], s, offset_2d),
 				interpolate_2d(m3dp[arr[3] + 1][arr[2]], s, offset_2d));
 	}
 }
@@ -63,10 +75,12 @@ void	get_trigonometric(t_map *map, double *v)
 void	draw_everthing(t_data *data)
 {
 	double	v[6];
+	t_map	*mapp;
 
-	get_trigonometric(&(data->map), v);
-	interpolate_3d(&(data->map), v);
-	draw_map(data);
+	mapp = &(data->map);
+	get_trigonometric(mapp, v);
+	interpolate_3d(mapp, v);
+	draw_map(mapp, data->addr);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 	draw_info(data);
 }

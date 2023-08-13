@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_map2.c                                       :+:      :+:    :+:   */
+/*   parse_map2_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michang <michang@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/08 17:40:08 by michang           #+#    #+#             */
-/*   Updated: 2023/08/08 17:40:09 by michang          ###   ########.fr       */
+/*   Created: 2023/08/13 20:02:37 by michang           #+#    #+#             */
+/*   Updated: 2023/08/13 20:02:38 by michang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 static int	parse_color(char *line)
 {
@@ -67,28 +67,26 @@ static double	get_distance_from_center(t_3d_p p1)
 
 double	get_default_scale(t_map *map)
 {
-	int		i;
-	int		j;
-	int		max[2];
+	int		arr[4];
 	double	v[6];
 	double	max_v;
 
 	get_trigonometric(map, v);
 	interpolate_3d(map, v);
-	max[0] = 0;
-	max[1] = 0;
+	arr[2] = 0;
+	arr[3] = 0;
 	max_v = 0;
-	i = -1;
-	while (++i < (map->height))
+	arr[0] = -1;
+	while (++arr[0] < (map->height))
 	{
-		j = -1;
-		while (++j < (map->width))
+		arr[1] = -1;
+		while (++arr[1] < (map->width))
 		{
-			if (max_v < get_distance_from_center((map->m3d)[i][j]))
+			if (max_v < get_distance_from_center((map->m3d)[arr[0]][arr[1]]))
 			{
-				max[0] = i;
-				max[1] = j;
-				max_v = get_distance_from_center((map->m3d)[i][j]);
+				arr[2] = arr[0];
+				arr[3] = arr[1];
+				max_v = get_distance_from_center((map->m3d)[arr[0]][arr[1]]);
 			}
 		}
 	}

@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key_event.c                                        :+:      :+:    :+:   */
+/*   key_event_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michang <michang@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/08 17:27:25 by michang           #+#    #+#             */
-/*   Updated: 2023/08/08 17:27:26 by michang          ###   ########.fr       */
+/*   Created: 2023/08/13 20:02:26 by michang           #+#    #+#             */
+/*   Updated: 2023/08/13 20:02:28 by michang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 int	leave_event(int keycode, t_data *data)
 {
+	keycode = (int)data;
 	exit(0);
 	return (0);
 }
@@ -51,9 +52,9 @@ static void	set_scale(int keycode, t_map *map)
 		map->scale *= 1.02;
 	else if (keycode == 14 && map->scale > 0.5)
 		map->scale *= 0.98;
-	else if (keycode == 6)
+	else if (keycode == 6 && map->z_scale < 10)
 		map->z_scale += 0.08;
-	else if (keycode == 7)
+	else if (keycode == 7 && map->z_scale > -10)
 		map->z_scale -= 0.08;
 }
 

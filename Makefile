@@ -1,28 +1,39 @@
 CC = gcc
-FLAGS = -L ./minilibx_mms_20210621 -lmlx -framework OpenGL -framework Appkit -lz
-CFLAGS = -Wall -Wextra -Werror
-SRCS = fdf.c get_next_line.c get_next_line_utils.c draw_info.c bresenham_line.c \
-	interpolate_3d.c mini_libft1.c mini_libft2.c ft_split.c key_event.c draw.c \
-	parse_map1.c parse_map2.c
-NAME = fdf
-OBJECTS = $(SRCS:.c=.o)
-OBJECTS2 = $(SRCS2:.c=.o)
-INC = -I./
+FLAG = -L ./minilibx_mms_20210621 -lmlx -framework OpenGL -framework Appkit -lz
+WFLAG = -Wall -Wextra -Werror
 RMF = rm -f
+SRC_NAME = fdf get_next_line get_next_line_utils \
+	draw_info bresenham_line interpolate_3d \
+	mini_libft1 mini_libft2 ft_split \
+	key_event draw parse_map1 parse_map2
 
-all : $(NAME)
+MAN_DIR = ./man_src/
+MAN_SRC = $(addprefix $(MAN_DIR), $(addsuffix .c, $(SRC_NAME)))
+MAN_OBJ = $(addprefix $(MAN_DIR), $(addsuffix .o, $(SRC_NAME)))
+MAN_NAME = ./fdf
 
-$(NAME) : $(OBJECTS)
-	$(CC) $(CFLAGS) $(FLAGS) $(OBJECTS) -o $(NAME)
+BON_DIR = ./bon_src/
+BON_SRC = $(addprefix $(BON_DIR), $(addsuffix _bonus.c, $(SRC_NAME)))
+BON_OBJ = $(addprefix $(BON_DIR), $(addsuffix _bonus.o, $(SRC_NAME)))
+BON_NAME = ./fdf_bonus
+
+all : $(MAN_NAME)
+
+$(MAN_NAME) : $(MAN_OBJ)
+	$(CC) $(WFLAG) $(FLAG) $^ -o $@
+
+bonus : $(BON_OBJ)
+	$(CC) $(WFLAG) $(FLAG) $^ -o $(BON_NAME)
+	@touch bonus
 
 %.o : %.c
-	$(CC) -c $(INC) $<
+	$(CC) $(WFLAG) -I $(dir $<) -c $< -o $@
 
 clean :
-	$(RMF) $(OBJECTS) $(OBJECTS2) bonus
+	$(RMF) $(MAN_OBJ) $(BON_OBJ) bonus
 
 fclean : clean
-	$(RMF) $(NAME)
+	$(RMF) $(MAN_NAME) $(BON_NAME)
 
 re :
 	make fclean

@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   interpolate_3d.c                                   :+:      :+:    :+:   */
+/*   interpolate_3d_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michang <michang@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/08 22:47:39 by michang           #+#    #+#             */
-/*   Updated: 2023/08/08 22:47:40 by michang          ###   ########.fr       */
+/*   Created: 2023/08/13 20:02:23 by michang           #+#    #+#             */
+/*   Updated: 2023/08/13 20:02:25 by michang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
+
+int	to_theta(double rotate)
+{
+	return ((int)((rotate * 180) / M_PI) % 360);
+}
 
 static void	set_interpolate_3d(t_map *map, t_3d_p ***m3dp, int *arr)
 {
